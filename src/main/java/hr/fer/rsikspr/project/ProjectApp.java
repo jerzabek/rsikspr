@@ -1,13 +1,13 @@
-package com.example.demo;
+package hr.fer.rsikspr.project;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DemoApplication {
+public class ProjectApp {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(ProjectApp.class, args);
 	}
 
 }
