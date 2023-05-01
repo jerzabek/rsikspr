@@ -12,7 +12,7 @@
 	<artifactId>project</artifactId>
 	<version>0.0.1</version>
 	<name>project-app</name>
-	<description>Development of scalable profuction-grade information and communication systems project</description>
+	<description>Development of scalable production-grade information and communication systems project</description>
 	<properties>
 		<java.version>19</java.version>
 	</properties>
@@ -39,12 +39,10 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
 		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>2.1.214</version>
-			<scope>runtime</scope>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.6.0</version>
 		</dependency>
 
 	</dependencies>
