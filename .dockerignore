@@ -1,0 +1,48 @@
+# Ignore common temporary files and directories
+*.log
+*.tmp
+*.swp
+*.bak
+*.class
+*.iml
+
+# Ignore Maven build artifacts and directories
+/target/
+/.mvn/
+/.m2/
+/mvnw
+/mvnw.cmd
+
+# Ignore Gradle build artifacts and directories
+/build/
+/.gradle/
+
+# Ignore IDE-specific files and directories
+/.idea/
+*.iml
+*.ipr
+*.iws
+/.settings/
+/.project
+/.classpath
+/.factorypath
+/.metadata
+/.vscode/
+
+# Ignore git and version control files
+.git/
+.gitattributes
+.gitignore
+.gitmodules
+
+# Ignore OS-specific files and directories
+.DS_Store
+.Thumbs.db
+ehthumbs.db
+._*
+
+# Ignore other common files and directories
+/.env
+/.env.local
+/.env.production
+/.env.test
