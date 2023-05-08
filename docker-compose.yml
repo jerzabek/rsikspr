@@ -3,7 +3,10 @@ version: '3.9'
 services:
 
   rsikspr-service:
-    image: rsikspr
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: rsikspr:1.0.0
     container_name: rsikspr-service
     depends_on:
       - rsikspr-db

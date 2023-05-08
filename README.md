@@ -2,9 +2,9 @@
 ## Development of scalable profuction-grade information and communication systems
 ### Setup
 
-Generating the docker image:
+Generating the docker images:
 ```shell
-$ mvn clean package && docker build --tag=rsikspr:latest .
+$ docker compose build
 ```
 
 Running the application:
@@ -24,4 +24,4 @@ $ curl --location --request POST 'localhost:5555/messages'
 }'
 ```
 
-In order to see messages from today a GET request can be sent to `/messages/today`.
+In order to see messages from today a GET request can be sent to `localhost:5555/messages/today`.
