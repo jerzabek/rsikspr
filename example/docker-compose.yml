@@ -18,6 +18,8 @@ services:
     container_name: rsikspr-db
     restart: always
     environment:
+      POSTGRES_DB: 'rsikspr'
+      POSTGRES_USER: 'postgres'
       POSTGRES_PASSWORD: 123
     ports:
       - "5550:5432"
