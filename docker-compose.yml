@@ -15,15 +15,11 @@ services:
 
   chat-service:
     container_name: chat-service
-    image: chat-service:1.0.0
+    image: chat-service:0.1.2
     restart: always
     build:
       context: ./services/chat-service/
       dockerfile: Dockerfile
-      args:
-        CHAT_SERVICE_DB_URL: ${CHAT_SERVICE_DB_URL}
-        CHAT_SERVICE_DB_USERNAME: ${CHAT_SERVICE_DB_USERNAME}
-        CHAT_SERVICE_DB_PASSWORD: ${CHAT_SERVICE_DB_PASSWORD}
     environment:
       CHAT_SERVICE_DB_URL: ${CHAT_SERVICE_DB_URL}
       CHAT_SERVICE_DB_USERNAME: ${CHAT_SERVICE_DB_USERNAME}
