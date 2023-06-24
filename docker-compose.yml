@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+
+  chat-service-database:
+    image: postgres
+    container_name: chat-service-database
+    restart: always
+    environment:
+      POSTGRES_DB: 'chat-service'
+      POSTGRES_USER: ${CHAT_SERVICE_DB_USERNAME}
+      POSTGRES_PASSWORD: ${CHAT_SERVICE_DB_PASSWORD}
+    ports:
+      - "5001:5432"
+
+  chat-service:
+    container_name: chat-service
+    image: chat-service:1.0.0
+    restart: always
+    build:
+      context: ./services/chat-service/
+      dockerfile: Dockerfile
+      args:
+        CHAT_SERVICE_DB_URL: ${CHAT_SERVICE_DB_URL}
+        CHAT_SERVICE_DB_USERNAME: ${CHAT_SERVICE_DB_USERNAME}
+        CHAT_SERVICE_DB_PASSWORD: ${CHAT_SERVICE_DB_PASSWORD}
+    environment:
+      CHAT_SERVICE_DB_URL: ${CHAT_SERVICE_DB_URL}
+      CHAT_SERVICE_DB_USERNAME: ${CHAT_SERVICE_DB_USERNAME}
+      CHAT_SERVICE_DB_PASSWORD: ${CHAT_SERVICE_DB_PASSWORD}
+    depends_on:
+      - chat-service-database
+    ports:
+      - "5000:8080"
