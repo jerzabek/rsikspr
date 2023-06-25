@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import static hr.fer.rsikspr.billingservice.authorization.Response.getSerializedErrorBody;
 import static hr.fer.rsikspr.billingservice.common.Constants.USER_AUTHENTICATION_HEADER;
 
+@Slf4j(topic = "Security filter")
 public class AuthorizationFilter extends OncePerRequestFilter {
 
   @Override

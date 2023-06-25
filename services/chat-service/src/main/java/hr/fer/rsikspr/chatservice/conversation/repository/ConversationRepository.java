@@ -11,6 +11,4 @@ public interface ConversationRepository extends JpaRepository<Conversation, Inte
 
   boolean existsById(int id);
 
-  void deleteById(int id);
-
 }

@@ -50,4 +50,7 @@ public class MessageService {
     messageRepository.save(message);
   }
 
+  public int getMessageCount(int conversationId) {
+    return messageRepository.countByConversation_Id(conversationId);
+  }
 }

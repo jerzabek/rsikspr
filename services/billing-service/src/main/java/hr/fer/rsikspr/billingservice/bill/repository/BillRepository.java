@@ -9,4 +9,6 @@ public interface BillRepository extends JpaRepository<BillDAO, Integer> {
 
   List<BillDAO> findAllByAuthor(String author);
 
+  BillDAO findByConversationId(int conversationId);
+
 }

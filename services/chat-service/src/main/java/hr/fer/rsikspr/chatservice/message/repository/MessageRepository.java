@@ -10,4 +10,6 @@ public interface MessageRepository extends JpaRepository<MessageDAO, Integer> {
 
   List<MessageSummaryDTO> findAllByConversationId(int conversationId);
 
+  int countByConversation_Id(int conversationId);
+
 }

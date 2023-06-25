@@ -14,7 +14,8 @@
     <name>billing-service</name>
     <description>billing-service</description>
     <properties>
-        <java.version>17</java.version>
+        <spring-boot.run.jvmArguments>-Duser.timezone=GMT+2</spring-boot.run.jvmArguments>
+        <java.version>19</java.version>
     </properties>
     <dependencies>
         <dependency>

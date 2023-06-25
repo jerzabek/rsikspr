@@ -1,8 +1,10 @@
 package hr.fer.rsikspr.chatservice.conversation.controller;
 
 import hr.fer.rsikspr.chatservice.conversation.dto.ConversationCreationDTO;
+import hr.fer.rsikspr.chatservice.conversation.dto.ConversationResponseDTO;
 import hr.fer.rsikspr.chatservice.conversation.model.Conversation;
 import hr.fer.rsikspr.chatservice.conversation.service.ConversationService;
+import hr.fer.rsikspr.chatservice.message.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,7 @@ import static hr.fer.rsikspr.chatservice.common.Constants.USER_AUTHENTICATION_HE
 public class ConversationController {
 
   private final ConversationService conversationService;
+  private final MessageService messageService;
 
   @GetMapping("/conversations")
   public List<Conversation> getConversations(@RequestHeader(USER_AUTHENTICATION_HEADER) String user) {
@@ -26,13 +29,14 @@ public class ConversationController {
   }
 
   @PostMapping("/conversations")
-  public Conversation createConversation(@RequestHeader(USER_AUTHENTICATION_HEADER) String user, @RequestBody ConversationCreationDTO conversationCreationDTO) {
-    log.info("Hello");
+  public Conversation createConversation(@RequestHeader(USER_AUTHENTICATION_HEADER) String user,
+                                         @RequestBody ConversationCreationDTO conversationCreationDTO) {
     return conversationService.createConversation(user, conversationCreationDTO.getTitle());
   }
 
   @DeleteMapping("/conversations/{conversationId}")
-  public void deleteConversation(@RequestHeader(USER_AUTHENTICATION_HEADER) String user, @PathVariable("conversationId") int conversationId) {
+  public void endConversation(@RequestHeader(USER_AUTHENTICATION_HEADER) String user,
+                              @PathVariable("conversationId") int conversationId) {
     if (!conversationService.conversationExists(conversationId)) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
@@ -43,11 +47,12 @@ public class ConversationController {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
 
-    conversationService.deleteConversation(conversationId);
+    conversationService.endConversation(conversationId);
   }
 
   @GetMapping("/conversations/{conversationId}")
-  public Conversation getConversation(@RequestHeader(USER_AUTHENTICATION_HEADER) String user, @PathVariable("conversationId") int conversationId) {
+  public ConversationResponseDTO getConversation(@RequestHeader(USER_AUTHENTICATION_HEADER) String user,
+                                                 @PathVariable("conversationId") int conversationId) {
     if (!conversationService.conversationExists(conversationId)) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
@@ -58,7 +63,8 @@ public class ConversationController {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
 
-    return conversation;
+    return new ConversationResponseDTO(conversation,
+            messageService.getMessageCount(conversationId));
   }
 
 }

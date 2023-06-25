@@ -3,6 +3,7 @@ package hr.fer.rsikspr.billingservice.bill.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
@@ -30,6 +31,10 @@ public class BillDAO {
 
   @Column
   private double rate;
+
+  @Column
+  @ColumnDefault("0")
+  private Integer count;
 
   @Column
   private BillState state;

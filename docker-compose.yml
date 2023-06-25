@@ -15,7 +15,7 @@ services:
 
   chat-service:
     container_name: chat-service
-    image: chat-service:0.1.4
+    image: chat-service:0.1.7
     restart: always
     build:
       context: ./services/chat-service/
@@ -24,12 +24,11 @@ services:
       CHAT_SERVICE_DB_URL: ${CHAT_SERVICE_DB_URL}
       CHAT_SERVICE_DB_USERNAME: ${CHAT_SERVICE_DB_USERNAME}
       CHAT_SERVICE_DB_PASSWORD: ${CHAT_SERVICE_DB_PASSWORD}
+      BILLING_SERVICE_API_URL: ${BILLING_SERVICE_API_URL}
     depends_on:
       - chat-service-database
     ports:
       - "5000:8080"
-
-      
 
   billing-service-database:
     image: postgres
@@ -44,7 +43,7 @@ services:
 
   billing-service:
     container_name: billing-service
-    image: billing-service:0.1.0
+    image: billing-service:0.1.5
     restart: always
     build:
       context: ./services/billing-service/
@@ -53,7 +52,36 @@ services:
       BILLING_SERVICE_DB_URL: ${BILLING_SERVICE_DB_URL}
       BILLING_SERVICE_DB_USERNAME: ${BILLING_SERVICE_DB_USERNAME}
       BILLING_SERVICE_DB_PASSWORD: ${BILLING_SERVICE_DB_PASSWORD}
+      CHAT_SERVICE_API_URL: ${CHAT_SERVICE_API_URL}
     depends_on:
       - billing-service-database
     ports:
       - "5100:8080"
+
+  payment-service-database:
+    image: postgres
+    container_name: payment-service-database
+    restart: always
+    environment:
+      POSTGRES_DB: 'payment-service'
+      POSTGRES_USER: ${PAYMENT_SERVICE_DB_USERNAME}
+      POSTGRES_PASSWORD: ${PAYMENT_SERVICE_DB_PASSWORD}
+    ports:
+      - "5201:5432"
+
+  payment-service:
+    container_name: payment-service
+    image: payment-service:0.1.2
+    restart: always
+    build:
+      context: ./services/payment-service/
+      dockerfile: Dockerfile
+    environment:
+      PAYMENT_SERVICE_DB_URL: ${PAYMENT_SERVICE_DB_URL}
+      PAYMENT_SERVICE_DB_USERNAME: ${PAYMENT_SERVICE_DB_USERNAME}
+      PAYMENT_SERVICE_DB_PASSWORD: ${PAYMENT_SERVICE_DB_PASSWORD}
+      BILLING_SERVICE_API_URL: ${BILLING_SERVICE_API_URL}
+    depends_on:
+      - payment-service-database
+    ports:
+      - "5200:8080"

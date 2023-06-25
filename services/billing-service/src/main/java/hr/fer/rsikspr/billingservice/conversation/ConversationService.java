@@ -2,6 +2,8 @@ package hr.fer.rsikspr.billingservice.conversation;
 
 import hr.fer.rsikspr.billingservice.bill.model.ConversationDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import static hr.fer.rsikspr.billingservice.common.Constants.USER_AUTHENTICATION
 
 @Service
 @RequiredArgsConstructor
+@Slf4j(topic = "ConversationService")
 public class ConversationService {
 
   private final RestTemplate restTemplate;
@@ -33,6 +36,7 @@ public class ConversationService {
       responseEntity = restTemplate
               .exchange(getConversationEndpoint, HttpMethod.GET, entity, ConversationDTO.class);
     } catch (Exception e) {
+      log.info("Failed to fetch conversation with id: {}", conversationId);
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
 
