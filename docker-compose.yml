@@ -15,7 +15,7 @@ services:
 
   chat-service:
     container_name: chat-service
-    image: chat-service:0.1.2
+    image: chat-service:0.1.4
     restart: always
     build:
       context: ./services/chat-service/
@@ -28,3 +28,32 @@ services:
       - chat-service-database
     ports:
       - "5000:8080"
+
+      
+
+  billing-service-database:
+    image: postgres
+    container_name: billing-service-database
+    restart: always
+    environment:
+      POSTGRES_DB: 'billing-service'
+      POSTGRES_USER: ${BILLING_SERVICE_DB_USERNAME}
+      POSTGRES_PASSWORD: ${BILLING_SERVICE_DB_PASSWORD}
+    ports:
+      - "5101:5432"
+
+  billing-service:
+    container_name: billing-service
+    image: billing-service:0.1.0
+    restart: always
+    build:
+      context: ./services/billing-service/
+      dockerfile: Dockerfile
+    environment:
+      BILLING_SERVICE_DB_URL: ${BILLING_SERVICE_DB_URL}
+      BILLING_SERVICE_DB_USERNAME: ${BILLING_SERVICE_DB_USERNAME}
+      BILLING_SERVICE_DB_PASSWORD: ${BILLING_SERVICE_DB_PASSWORD}
+    depends_on:
+      - billing-service-database
+    ports:
+      - "5100:8080"
