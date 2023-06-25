@@ -46,4 +46,19 @@ public class ConversationController {
     conversationService.deleteConversation(conversationId);
   }
 
+  @GetMapping("/conversations/{conversationId}")
+  public Conversation getConversation(@RequestHeader(USER_AUTHENTICATION_HEADER) String user, @PathVariable("conversationId") int conversationId) {
+    if (!conversationService.conversationExists(conversationId)) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    }
+
+    Conversation conversation = conversationService.getConversation(conversationId);
+
+    if (!conversation.getAuthor().equals(user)) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    }
+
+    return conversation;
+  }
+
 }
