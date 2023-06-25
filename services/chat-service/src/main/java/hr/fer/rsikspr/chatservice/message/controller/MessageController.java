@@ -1,46 +1,53 @@
 package hr.fer.rsikspr.chatservice.message.controller;
 
-import hr.fer.rsikspr.chatservice.message.dto.BasicMessage;
-import hr.fer.rsikspr.chatservice.message.dto.ExtendedMessage;
-import hr.fer.rsikspr.chatservice.message.dto.Message;
-import jakarta.validation.Valid;
+import hr.fer.rsikspr.chatservice.conversation.model.Conversation;
+import hr.fer.rsikspr.chatservice.conversation.service.ConversationService;
+import hr.fer.rsikspr.chatservice.message.dto.MessageDTO;
+import hr.fer.rsikspr.chatservice.message.dto.MessageSummaryDTO;
+import hr.fer.rsikspr.chatservice.message.model.MessageDAO;
+import hr.fer.rsikspr.chatservice.message.service.MessageService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+
+import static hr.fer.rsikspr.chatservice.common.Constants.USER_AUTHENTICATION_HEADER;
 
 @RestController
 @Slf4j(topic = "MessageController")
+@RequiredArgsConstructor
 public class MessageController {
 
-  @PostMapping("/message")
-  public ResponseEntity<String> receiveMessage(@RequestBody @Valid Message message) {
-    String type;
+  private final MessageService messageService;
+  private final ConversationService conversationService;
 
-    try {
-      switch (message) {
-        case BasicMessage basicMessage -> {
-          type = "Basic message";
-          log.info("Received basic message: " + basicMessage.getText());
-        }
-
-        case ExtendedMessage extendedMessage -> {
-          type = "Extended message";
-          log.info("Received extended message: " + extendedMessage.getContent().getText());
-        }
-
-        default -> {
-          log.info("Unknown ://");
-          return ResponseEntity.badRequest().body("Unknown message type");
-        }
-      }
-    } catch (Exception e) {
-      log.error("Could not format request", e);
-      return ResponseEntity.badRequest().body("Invalid format");
+  @GetMapping("/conversations/{conversationId}/messages")
+  public List<MessageSummaryDTO> getMessagesForConversation(@PathVariable("conversationId") int conversationId) {
+    if (!conversationService.conversationExists(conversationId)) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
-    return ResponseEntity.ok().body(String.format("Message received (type: %s)", type));
+    return messageService.getMessagesInConversation(conversationId);
+  }
+
+  @PostMapping("/conversations/{conversationId}/messages")
+  public void createMessageInConversation(@RequestHeader(USER_AUTHENTICATION_HEADER) String user,
+                                          @PathVariable("conversationId") int conversationId,
+                                          @RequestBody MessageDTO message) {
+    if (!conversationService.conversationExists(conversationId)) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    }
+
+    MessageDAO parsedMessage = messageService.parseMessage(message);
+
+    Conversation conversation = conversationService.getConversation(conversationId);
+    parsedMessage.setConversation(conversation);
+    parsedMessage.setAuthor(user);
+
+    messageService.saveMessage(parsedMessage);
   }
 
 }

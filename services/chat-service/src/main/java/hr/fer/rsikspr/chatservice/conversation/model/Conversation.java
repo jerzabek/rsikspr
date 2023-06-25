@@ -1,12 +1,15 @@
 package hr.fer.rsikspr.chatservice.conversation.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.sql.Timestamp;
 
 @Entity
+@Getter
+@Setter
 public class Conversation {
 
   @Id

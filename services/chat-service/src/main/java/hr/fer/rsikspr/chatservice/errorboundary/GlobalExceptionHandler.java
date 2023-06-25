@@ -1,4 +1,4 @@
-package hr.fer.rsikspr.chatservice;
+package hr.fer.rsikspr.chatservice.errorboundary;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,18 +16,21 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<Map<String, List<String>>> handleValidationErrors(MethodArgumentNotValidException ex) {
-    List<String> errors = ex.getBindingResult()
-            .getFieldErrors()
-            .stream().map(FieldError::getDefaultMessage)
-            .collect(Collectors.toList());
+  public ResponseEntity<Map<String, List<String>>> handleValidationErrors(MethodArgumentNotValidException exception) {
+    List<String> errors = collectFieldValidationErrors(exception);
 
     return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
   }
 
-  private Map<String, List<String>> getErrorsMap(List<String> errors) {
+  private static List<String> collectFieldValidationErrors(MethodArgumentNotValidException exception) {
+    return exception.getBindingResult()
+            .getFieldErrors()
+            .stream().map(FieldError::getDefaultMessage)
+            .collect(Collectors.toList());
+  }
+
+  private static Map<String, List<String>> getErrorsMap(List<String> errors) {
     Map<String, List<String>> errorResponse = new HashMap<>();
 
     errorResponse.put("errors", errors);

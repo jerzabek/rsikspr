@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @JsonTypeName("extended")
-public class ExtendedMessage extends Message {
+public class ExtendedMessage extends MessageDTO {
 
   @Getter
   @Setter
