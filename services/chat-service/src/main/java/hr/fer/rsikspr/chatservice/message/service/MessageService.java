@@ -3,7 +3,6 @@ package hr.fer.rsikspr.chatservice.message.service;
 import hr.fer.rsikspr.chatservice.message.dto.BasicMessage;
 import hr.fer.rsikspr.chatservice.message.dto.ExtendedMessage;
 import hr.fer.rsikspr.chatservice.message.dto.MessageDTO;
-import hr.fer.rsikspr.chatservice.message.dto.MessageSummaryDTO;
 import hr.fer.rsikspr.chatservice.message.model.MessageDAO;
 import hr.fer.rsikspr.chatservice.message.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,7 @@ public class MessageService {
 
   private final MessageRepository messageRepository;
 
-  public List<MessageSummaryDTO> getMessagesInConversation(int conversationId) {
+  public List<MessageDAO> getMessagesInConversation(int conversationId) {
     return messageRepository.findAllByConversationId(conversationId);
   }
 

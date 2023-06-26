@@ -14,7 +14,7 @@ services:
       - "5001:5432"
 
   chat-service:
-    image: chat-service:0.1.7
+    image: chat-service:0.1.9
     restart: always
     build:
       context: ./services/chat-service/
